@@ -8,6 +8,7 @@
 #include "opencv2/opencv.hpp"
 
 #include <WestBot/CoreSLAM/CoreSlam.hpp>
+#include <WestBot/CoreSLAM/Defines.hpp>
 
 #define TEST_FILENAME "test_lab.dat"
 #define TEST_SCAN_SIZE 682
@@ -17,8 +18,11 @@
 #define TEST_OFFSET_LASER 145
 #define TEST_HOLE_WIDTH 600
 
-ts_map_t trajectory;
-ts_map_t map;
+using namespace WestBot;
+using namespace WestBot::CoreSLAM;
+
+Map trajectory;
+Map map;
 
 typedef struct {
     double r;	    // length wheels' radius
@@ -30,14 +34,14 @@ typedef struct {
 typedef struct {
     int timestamp;
     int q1, q2;
-    ts_scan_t scan;
+    Scan scan;
 } ts_sensor_data_t2;
 
 ts_sensor_data_t2 sensor_data[600];
 
 void record_map(
-    ts_map_t* map,
-    ts_map_t* overlay,
+    Map* map,
+    Map* overlay,
     char* filename,
     int width,
     int height )
@@ -60,7 +64,11 @@ void record_map(
     fclose(output);
 }
 
-void draw_map( ts_map_t* map, ts_map_t* overlay, int width, int height )
+void draw_map(
+    Map* map,
+    Map* overlay,
+    int width,
+    int height )
 {
     int x, y, xp, yp;
     cv::Mat image(height,width,CV_8UC3);
@@ -87,7 +95,7 @@ void draw_map( ts_map_t* map, ts_map_t* overlay, int width, int height )
     cv::waitKey(10);
 }
 
-void draw_map2( ts_map_t* map, ts_map_t* overlay, int width, int height )
+void draw_map2( Map* map, Map* overlay, int width, int height )
 {
     int x, y, xp, yp;
     cv::Mat image(height,width,CV_8UC3);
@@ -112,7 +120,7 @@ void draw_map2( ts_map_t* map, ts_map_t* overlay, int width, int height )
     cv::waitKey(10);
 }
 
-void draw_scan( ts_scan_t* scan, ts_map_t* map, ts_position_t* pos )
+void draw_scan( Scan* scan, Map* map, Position* pos )
 {
     double c, s;
     double x2p, y2p;
@@ -137,13 +145,13 @@ void draw_scan( ts_scan_t* scan, ts_map_t* map, ts_position_t* pos )
     }
 }
 
-ts_position_t monte_carlo_move(
-    ts_scan_t* scan,
-    ts_map_t* map,
-    ts_position_t* start_pos,
+Position monte_carlo_move(
+    Scan* scan,
+    Map* map,
+    Position* start_pos,
     int debug )
 {
-    ts_position_t cpp, currentpos, bestpos, lastbestpos;
+    Position cpp, currentpos, bestpos, lastbestpos;
     int currentdist;
     int bestdist, lastbestdist;
     int counter = 0;
@@ -183,7 +191,7 @@ int read_sensor_data( char* inputfile, ts_sensor_data_t2* data )
     FILE *input;
     int i, j, nb_sensor_data = 0;
     int d[TS_SCAN_SIZE];
-    ts_scan_t *scan;
+    Scan *scan;
     char *str, line[4000];
     double angle_deg, angle_rad;
 
@@ -251,7 +259,7 @@ int main( int argc,char** argv )
 {
     FILE *output, *output2;
     double angle_rad, angle_deg;
-    ts_position_t startpos, position, position2;
+    Position startpos, position, position2;
     char filename[256];
     int i, x, y, test;
     int nb_sensor_data, cnt_scans;
@@ -268,7 +276,7 @@ int main( int argc,char** argv )
 
     // Read all the scans
     if(1 == argc)
-      nb_sensor_data = read_sensor_data("test_lab.dat",sensor_data);
+      nb_sensor_data = read_sensor_data(TEST_FILENAME,sensor_data);
     else
       nb_sensor_data = read_sensor_data(argv[1],sensor_data);
     printf("sensor data = %d\n", nb_sensor_data);

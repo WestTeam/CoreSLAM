@@ -6,14 +6,20 @@
 
 #include <WestBot/CoreSLAM/CoreSlam.hpp>
 
-double
-ts_distance(ts_position_t *pos1, ts_position_t *pos2)
+using namespace WestBot;
+using namespace WestBot::CoreSLAM;
+
+double WestBot::CoreSLAM::ts_distance( Position* pos1, Position* pos2 )
 {
     return sqrt((pos1->x - pos2->x) * (pos1->x - pos2->x) + (pos1->y - pos2->y) * (pos1->y - pos2->y));
 }
 
-void
-ts_save_map_pgm(ts_map_t *map, ts_map_t *overlay, char *filename, int width, int height)
+void WestBot::CoreSLAM::ts_save_map_pgm(
+    Map* map,
+    Map* overlay,
+    char *filename,
+    int width,
+    int height )
 {
     int x, y, xp, yp;
     FILE *output;
@@ -33,8 +39,7 @@ ts_save_map_pgm(ts_map_t *map, ts_map_t *overlay, char *filename, int width, int
     fclose(output);
 }
 
-void
-ts_draw_scan(ts_scan_t *scan, ts_map_t *map, ts_position_t *pos)
+void WestBot::CoreSLAM::ts_draw_scan( Scan* scan, Map* map, Position* pos )
 {
     double c, s;
     double x2p, y2p;
@@ -59,8 +64,13 @@ ts_draw_scan(ts_scan_t *scan, ts_map_t *map, ts_position_t *pos)
     }
 }
 
-void
-ts_draw_scan_RGB(ts_scan_t *scan, ts_map_t *map, ts_position_t *pos, unsigned char *pixmap, int scale, int reversey)
+void WestBot::CoreSLAM::ts_draw_scan_RGB(
+    Scan* scan,
+    Map* map,
+    Position* pos,
+    unsigned char* pixmap,
+    int scale,
+    int reversey )
 {
     double c, s;
     double x2p, y2p;
@@ -94,5 +104,3 @@ ts_draw_scan_RGB(ts_scan_t *scan, ts_map_t *map, ts_position_t *pos, unsigned ch
         }
     }
 }
-
-

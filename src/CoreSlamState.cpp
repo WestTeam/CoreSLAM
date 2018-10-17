@@ -5,8 +5,19 @@
 
 #include <WestBot/CoreSLAM/CoreSlam.hpp>
 
-void
-ts_state_init(ts_state_t *state, ts_map_t *map, ts_robot_parameters_t *params, ts_laser_parameters_t *laser_params, ts_position_t *position, double sigma_xy, double sigma_theta, int hole_width, int direction)
+using namespace WestBot;
+using namespace WestBot::CoreSLAM;
+
+void WestBot::CoreSLAM::ts_state_init(
+    State* state,
+    Mao* map,
+    RobotParameters* params,
+    LaserParameters* laser_params,
+    Position* position,
+    double sigma_xy,
+    double sigma_theta,
+    int hole_width,
+    int direction )
 {
     ts_random_init(&state->randomizer, 0xdead);
     state->map = map;
@@ -25,8 +36,11 @@ ts_state_init(ts_state_t *state, ts_map_t *map, ts_robot_parameters_t *params, t
     state->hole_width = hole_width;
 }
 
-void
-ts_build_scan(ts_sensor_data_t *sd, ts_scan_t *scan, ts_state_t *state, int span)
+void WestBot::CoreSLAM::ts_build_scan(
+    SensorData* sd,
+    Scan* scan,
+    State* state,
+    int span )
 {
     int i, j;
     double angle_rad, angle_deg;
@@ -59,7 +73,9 @@ ts_build_scan(ts_sensor_data_t *sd, ts_scan_t *scan, ts_state_t *state, int span
     }
 }
 
-void ts_iterative_map_building(ts_sensor_data_t *sd, ts_state_t *state)
+void WestBot::CoreSLAM::ts_iterative_map_building(
+    SensorData* sd,
+    State* state )
 {
     double psidot, v, d;
     ts_scan_t scan2map;
@@ -116,4 +132,3 @@ void ts_iterative_map_building(ts_sensor_data_t *sd, ts_state_t *state)
     state->q2 = sd->q2;
     state->timestamp = sd->timestamp;
 }
-

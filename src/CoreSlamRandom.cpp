@@ -6,13 +6,27 @@
 
 #include <WestBot/CoreSLAM/CoreSlam.hpp>
 
-static unsigned long SHR3(ts_randomizer_t *d)
-{ d->jz=d->jsr; d->jsr^=(d->jsr<<13); d->jsr^=(d->jsr>>17); d->jsr^=(d->jsr<<5); return d->jz+d->jsr;}
+using namespace WestBot;
+using namespace WestBot::CoreSLAM;
 
-static double UNI(ts_randomizer_t *d)
-{ return .5 + (signed)SHR3(d) * .2328306e-9;}
+namespace
+{
+    unsigned long SHR3( WestBot::CoreSLAM::Randomizer* d )
+    {
+        d->jz=d->jsr;
+        d->jsr^=(d->jsr<<13);
+        d->jsr^=(d->jsr>>17);
+        d->jsr^=(d->jsr<<5);
+        return d->jz+d->jsr;
+    }
 
-double ts_random_normal_fix(ts_randomizer_t *d)
+    double UNI( WestBot::CoreSLAM::Randomizer* d )
+    {
+        return .5 + (signed)SHR3(d) * .2328306e-9;
+    }
+}
+
+double WestBot::CoreSLAM::ts_random_normal_fix( Randomizer* d )
 {
     const double r = 3.442620; 	// The starting of the right tail
     static double x, y;
@@ -34,23 +48,23 @@ double ts_random_normal_fix(ts_randomizer_t *d)
         if( d->fn[d->iz]+UNI(d)*(d->fn[d->iz-1]-d->fn[d->iz]) < exp(-.5*x*x) )
             return x;
         // Start all over
-        d->hz=SHR3(d);
+        d->hz=::SHR3(d);
         d->iz=d->hz&127;
         if((unsigned long)abs(d->hz)<d->kn[d->iz])
             return (d->hz*d->wn[d->iz]);
     }
 }
 
-double ts_random_normal(ts_randomizer_t *d, double m, double s)
+double WestBot::CoreSLAM::ts_random_normal( Randomizer* d, double m, double s )
 {
     double x;
-    d->hz = SHR3(d);
+    d->hz = ::SHR3(d);
     d->iz = d->hz & 127;
     x= ((unsigned long)abs(d->hz) < d->kn[d->iz])? d->hz * d->wn[d->iz] : ts_random_normal_fix(d); // Generic version
     return x * s + m ;
 };
 
-void ts_random_init(ts_randomizer_t *d, unsigned long jsrseed)
+void WestBot::CoreSLAM::ts_random_init( Randomizer* d, unsigned long jsrseed )
 {
     const double m1 = 2147483648.0;
 
@@ -74,12 +88,12 @@ void ts_random_init(ts_randomizer_t *d, unsigned long jsrseed)
     }
 }
 
-double ts_random(ts_randomizer_t *d)
+double WestBot::CoreSLAM::ts_random( Randomizer* d )
 {
-    return UNI(d);
+    return ::UNI( d );
 }
 
-long ts_random_int(ts_randomizer_t *d, long min, long max)
+long WestBot::CoreSLAM::ts_random_int( Randomizer* d, long min, long max )
 {
     // Output random integer in the interval min <= x <= max
     long r;
@@ -89,9 +103,17 @@ long ts_random_int(ts_randomizer_t *d, long min, long max)
     return r;
 }
 
-ts_position_t ts_monte_carlo_search(ts_randomizer_t *randomizer, ts_scan_t *scan, ts_map_t *map, ts_position_t *start_pos, double sigma_xy, double sigma_theta, int stop, int *bd)
+Position WestBot::CoreSLAM::ts_monte_carlo_search(
+    Randomizer* randomizer,
+    Scan* scan,
+    Map* map,
+    Position* start_pos,
+    double sigma_xy,
+    double sigma_theta,
+    int stop,
+    int* bd )
 {
-    ts_position_t currentpos, bestpos, lastbestpos;
+    Position currentpos, bestpos, lastbestpos;
     int currentdist;
     int bestdist, lastbestdist;
     int counter = 0, debug = 0;
@@ -133,5 +155,3 @@ ts_position_t ts_monte_carlo_search(ts_randomizer_t *randomizer, ts_scan_t *scan
         *bd = bestdist;
     return bestpos;
 }
-
-

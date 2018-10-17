@@ -6,9 +6,14 @@
 #include <stdint.h>		// Use the C99 official header
 
 #include <WestBot/CoreSLAM/CoreSlam.hpp>
+#include <WestBot/CoreSLAM/Defines.hpp>
 
-void
-ts_map_init(ts_map_t *map)
+#define SWAP(x, y) (x ^= y ^= x ^= y)
+
+using namespace WestBot;
+using namespace WestBot::CoreSLAM;
+
+void WestBot::CoreSLAM::ts_map_init( Map* map )
 {
     int x, y, initval;
     ts_map_pixel_t *ptr;
@@ -20,8 +25,10 @@ ts_map_init(ts_map_t *map)
     }
 }
 
-int
-ts_distance_scan_to_map(ts_scan_t *scan, ts_map_t *map, ts_position_t *pos)
+int WestBot::CoreSLAM::ts_distance_scan_to_map(
+    Scan* scan,
+    Map* map,
+    Position* pos )
 {
     double c, s;
     int i, x, y, nb_points = 0;
@@ -47,11 +54,16 @@ ts_distance_scan_to_map(ts_scan_t *scan, ts_map_t *map, ts_position_t *pos)
     return (int)sum;
 }
 
-#define SWAP(x, y) (x ^= y ^= x ^= y)
-
-void
-ts_map_laser_ray(ts_map_t *map, int x1, int y1, int x2, int y2,
-                 int xp, int yp, int value, int alpha)
+void ts_map_laser_ray(
+    Map* map,
+    int x1,
+    int y1,
+    int x2,
+    int y2,
+    int xp,
+    int yp,
+    int value,
+    int alpha )
 
 {
     int x2c, y2c, dx, dy, dxc, dyc, error, errorv, derrorv, x;
@@ -130,8 +142,12 @@ ts_map_laser_ray(ts_map_t *map, int x1, int y1, int x2, int y2,
     }
 }
 
-void
-ts_map_update(ts_scan_t *scan, ts_map_t *map, ts_position_t *pos, int quality, int hole_width)
+void WestBot::CoreSLAM::ts_map_update(
+    Scan* scan,
+    Map* map,
+    Position* pos,
+    int quality,
+    int hole_width )
 {
     double c, s;
     double x2p, y2p;
