@@ -6,8 +6,11 @@
 namespace WestBot {
 namespace CoreSLAM {
 
-struct Position
+class Position
 {
+public:
+    Position() = default;
+
     double x;     // in mm
     double y;     // in mm
     double theta; // in degrees

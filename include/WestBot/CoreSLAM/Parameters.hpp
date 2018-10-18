@@ -6,16 +6,22 @@
 namespace WestBot {
 namespace CoreSLAM {
 
-struct RobotParameters
+class RobotParameters
 {
+public:
+    RobotParameters() = default;
+
     double r;	    // length wheels' radius
     double R;	    // half the wheels' axis length
     int inc;	    // wheels' counters increments per turn
     double ratio;   // ratio between left and right wheel
 };
 
-struct LaserParameters
+class LaserParameters
 {
+public:
+    LaserParameters() = default;
+
     double offset;  // position of the laser wrt center of rotation
     int scan_size;  // number of points per scan
     int angle_min;  // start angle for scan

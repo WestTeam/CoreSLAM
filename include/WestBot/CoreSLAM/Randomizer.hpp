@@ -6,8 +6,11 @@
 namespace WestBot {
 namespace CoreSLAM {
 
-struct Randomizer
+class Randomizer
 {
+public:
+    Randomizer() = default;
+
     unsigned long jz;
     unsigned long jsr;
     long hz;

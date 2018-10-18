@@ -8,8 +8,11 @@
 namespace WestBot {
 namespace CoreSLAM {
 
-struct Scan
+class Scan
 {
+public:
+    Scan() = default;
+
     double x[ TS_SCAN_SIZE ];
     double y[ TS_SCAN_SIZE ];
     int value[ TS_SCAN_SIZE ];

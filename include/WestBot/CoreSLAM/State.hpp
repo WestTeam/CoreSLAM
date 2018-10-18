@@ -12,8 +12,11 @@
 namespace WestBot {
 namespace CoreSLAM {
 
-struct State
+class State
 {
+public:
+    State() = default;
+
     Randomizer randomizer;
     Map* map;
     RobotParameters params;

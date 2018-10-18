@@ -10,8 +10,11 @@ namespace CoreSLAM {
 
 typedef unsigned short ts_map_pixel_t;
 
-struct Map
+class Map
 {
+public:
+    Map() = default;
+
     ts_map_pixel_t map[ TS_MAP_SIZE * TS_MAP_SIZE ];
 };
 

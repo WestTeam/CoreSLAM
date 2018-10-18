@@ -9,8 +9,11 @@
 namespace WestBot {
 namespace CoreSLAM {
 
-struct SensorData
+class SensorData
 {
+public:
+    SensorData() = default;
+
     unsigned int timestamp;
     int q1;                 // Odometry information
     int q2;                 // Odometry information
