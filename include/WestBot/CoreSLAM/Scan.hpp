@@ -8,10 +8,22 @@
 namespace WestBot {
 namespace CoreSLAM {
 
+class Map;
+class Position;
+
 class Scan
 {
 public:
     Scan() = default;
+
+    void ts_draw_scan( Map* map, Position* pos );
+
+    void ts_draw_scan_RGB(
+        Map* map,
+        Position* pos,
+        unsigned char* pixmap,
+        int scale,
+        int reversey );
 
     double x[ TS_SCAN_SIZE ];
     double y[ TS_SCAN_SIZE ];

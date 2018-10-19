@@ -3,12 +3,12 @@
 #ifndef WESTBOT_CORESLAM_RANDOMIZER_HPP_
 #define WESTBOT_CORESLAM_RANDOMIZER_HPP_
 
-#include "Map.hpp"
-#include "Position.hpp"
-#include "Scan.hpp"
-
 namespace WestBot {
 namespace CoreSLAM {
+
+class Map;
+class Position;
+class Scan;
 
 class Randomizer
 {

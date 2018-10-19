@@ -6,6 +6,8 @@
 #include <stdint.h>		// Use the C99 official header
 
 #include <WestBot/CoreSLAM/Map.hpp>
+#include <WestBot/CoreSLAM/Position.hpp>
+#include <WestBot/CoreSLAM/Scan.hpp>
 
 #define SWAP(x, y) (x ^= y ^= x ^= y)
 

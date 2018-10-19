@@ -21,16 +21,7 @@ void ts_save_map_pgm(
     int width,
     int height );
 
-void ts_draw_scan( Scan* scan, Map* map, Position* pos );
-
-void ts_draw_scan_RGB(
-    Scan* scan,
-    Map* map,
-    Position* pos,
-    unsigned char* pixmap,
-    int scale,
-    int reversey );
-
+// ========================================================================== //
 void ts_state_init(
     State* state,
     Map* map,
@@ -42,13 +33,9 @@ void ts_state_init(
     int hole_width,
     int direction );
 
-void ts_build_scan(
-    SensorData* sd,
-    Scan* scan,
-    State* state,
-    int span );
-
 void ts_iterative_map_building( SensorData* sd, State* state );
+
+void ts_build_scan( SensorData* sd, Scan* scan, State* state, int span );
 
 // ========================================================================== //
 // Loop closing

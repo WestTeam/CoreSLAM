@@ -4,7 +4,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <WestBot/CoreSLAM/Map.hpp>
+#include <WestBot/CoreSLAM/Position.hpp>
 #include <WestBot/CoreSLAM/Randomizer.hpp>
+#include <WestBot/CoreSLAM/Scan.hpp>
 
 using namespace WestBot;
 using namespace WestBot::CoreSLAM;

@@ -4,11 +4,12 @@
 #define WESTBOT_CORESLAM_MAP_HPP_
 
 #include "Defines.hpp"
-#include "Position.hpp"
-#include "Scan.hpp"
 
 namespace WestBot {
 namespace CoreSLAM {
+
+class Scan;
+class Position;
 
 typedef unsigned short ts_map_pixel_t;
 
