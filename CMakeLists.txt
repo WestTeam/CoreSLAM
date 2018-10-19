@@ -17,11 +17,11 @@ include_directories( include )
 # library
 add_library(
     CoreSLAM SHARED
-    src/CoreSlamLoopClosing.cpp
-    src/CoreSlamState.cpp
+    #src/CoreSlamLoopClosing.cpp
     src/Map.cpp
     src/Position.cpp
-    src/Randomizer.cpp )
+    src/Randomizer.cpp
+    src/State.cpp )
 
 target_link_libraries( CoreSLAM )
 

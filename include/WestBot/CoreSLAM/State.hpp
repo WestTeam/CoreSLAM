@@ -12,10 +12,26 @@
 namespace WestBot {
 namespace CoreSLAM {
 
+class SensorData;
+
 class State
 {
 public:
-    State() = default;
+    State();
+
+    void ts_state_init(
+        Map* map,
+        RobotParameters* params,
+        LaserParameters* laser_params,
+        Position* position,
+        double sigma_xy,
+        double sigma_theta,
+        int hole_width,
+        int direction );
+
+    void ts_iterative_map_building( SensorData* sd );
+
+    void ts_build_scan( SensorData* sd, Scan* scan, int span );
 
     Randomizer randomizer;
     Map* map;

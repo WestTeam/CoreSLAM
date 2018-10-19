@@ -4,6 +4,8 @@
 
 #include <WestBot/CoreSLAM/CoreSlam.hpp>
 #include <WestBot/CoreSLAM/Randomizer.hpp>
+#include <WestBot/CoreSLAM/Scan.hpp>
+#include <WestBot/CoreSLAM/State.hpp>
 
 using namespace WestBot;
 using namespace WestBot::CoreSLAM;
@@ -19,7 +21,7 @@ Position WestBot::CoreSLAM::ts_close_loop_position(
     int quality;
     Position lc_position;
 
-    ts_build_scan(sensor_data, &scan, state, 1);
+    state->ts_build_scan(sensor_data, &scan, 1);
     lc_position = state->randomizer.ts_monte_carlo_search(&scan, loop_close_map, start_position, 600, 20, 100000, &quality);
     if (q) *q = quality;
     return lc_position;
