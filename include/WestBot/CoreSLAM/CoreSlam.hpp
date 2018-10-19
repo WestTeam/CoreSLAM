@@ -6,36 +6,12 @@
 #include "Map.hpp"
 #include "Parameters.hpp"
 #include "Position.hpp"
-#include "Randomizer.hpp"
 #include "Scan.hpp"
 #include "SensorData.hpp"
 #include "State.hpp"
 
 namespace WestBot {
 namespace CoreSLAM {
-
-// ========================================================================== //
-// RANDOM: Stochastic part
-double ts_random_normal_fix( Randomizer* d );
-
-double ts_random_normal( Randomizer* d, double m, double s );
-
-void ts_random_init( Randomizer* d, unsigned long jsrseed );
-
-double ts_random( Randomizer* d);
-
-long ts_random_int( Randomizer* d, long min, long max );
-
-Position ts_monte_carlo_search(
-    Randomizer* randomizer,
-    Scan* scan,
-    Map* map,
-    Position* start_pos,
-    double sigma_xy,
-    double sigma_theta,
-    int stop,
-    int* bestdist );
-
 // ========================================================================== //
 // Extensions
 void ts_save_map_pgm(

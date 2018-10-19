@@ -19,10 +19,10 @@ add_library(
     CoreSLAM SHARED
     src/CoreSlamExtension.cpp
     src/CoreSlamLoopClosing.cpp
-    src/CoreSlamRandom.cpp
     src/CoreSlamState.cpp
     src/Map.cpp
-    src/Position.cpp )
+    src/Position.cpp
+    src/Randomizer.cpp )
 
 target_link_libraries( CoreSLAM )
 

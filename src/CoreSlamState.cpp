@@ -19,7 +19,7 @@ void WestBot::CoreSLAM::ts_state_init(
     int hole_width,
     int direction )
 {
-    ts_random_init(&state->randomizer, 0xdead);
+    state->randomizer.ts_random_init( 0xdead );
     state->map = map;
     state->params = *params;
     state->laser_params = *laser_params;
@@ -114,7 +114,7 @@ void WestBot::CoreSLAM::ts_iterative_map_building(
     position.x += state->laser_params.offset * cos(thetarad);
     position.y += state->laser_params.offset * sin(thetarad);
     sd->position[state->direction] = position =
-        ts_monte_carlo_search(&state->randomizer, &state->scan, state->map, &position, state->sigma_xy, state->sigma_theta, 1000, NULL);
+        state->randomizer.ts_monte_carlo_search(&state->scan, state->map, &position, state->sigma_xy, state->sigma_theta, 1000, NULL);
     sd->position[state->direction].x -= state->laser_params.offset * cos(position.theta * M_PI / 180);
     sd->position[state->direction].y -= state->laser_params.offset * sin(position.theta * M_PI / 180);
     d = sqrt((state->position.x - sd->position[state->direction].x) * (state->position.x - sd->position[state->direction].x) +
