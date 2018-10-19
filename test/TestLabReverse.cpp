@@ -7,7 +7,9 @@
 
 #include "opencv2/opencv.hpp"
 
-#include <WestBot/CoreSLAM/CoreSlam.hpp>
+#include <WestBot/CoreSLAM/Scan.hpp>
+#include <WestBot/CoreSLAM/Position.hpp>
+#include <WestBot/CoreSLAM/Map.hpp>
 #include <WestBot/CoreSLAM/Defines.hpp>
 
 #define TEST_FILENAME "test_lab.dat"
@@ -157,7 +159,7 @@ Position monte_carlo_move(
     int counter = 0;
 
     currentpos = bestpos = lastbestpos = *start_pos;
-    currentdist = ts_distance_scan_to_map(scan, map, &currentpos);
+    currentdist = map->ts_distance_scan_to_map(scan, &currentpos);
     bestdist = lastbestdist = currentdist;
 
     do {
@@ -166,7 +168,7 @@ Position monte_carlo_move(
 	currentpos.y += 50 * (((double)rand()) / RAND_MAX - 0.5);
 	currentpos.theta += 50 * (((double)rand()) / RAND_MAX - 0.5);
 
-	currentdist = ts_distance_scan_to_map(scan, map, &currentpos);
+	currentdist = map->ts_distance_scan_to_map(scan, &currentpos);
 
 	if (currentdist < bestdist) {
 	    bestdist = currentdist;
@@ -283,8 +285,8 @@ int main( int argc,char** argv )
 
     for (test = 0; test != 1; test++) {
 
-        ts_map_init(&map);
-        ts_map_init(&trajectory);
+        map.ts_map_init();
+        trajectory.ts_map_init();
         output = fopen("test_trajectory.dat", "wt");
         position.x = 0.5 * TS_MAP_SIZE / TS_MAP_SCALE;
         position.y = 0.5 * TS_MAP_SIZE / TS_MAP_SCALE;
@@ -334,7 +336,7 @@ int main( int argc,char** argv )
 
             position = position2;
             printf("#%d : %lg %lg %lg\n", cnt_scans, position.x, position.y, position.theta);
-            ts_map_update(&sensor_data[cnt_scans].scan, &map, &position, 50, TEST_HOLE_WIDTH);
+            map.ts_map_update(&sensor_data[cnt_scans].scan, &position, 50, TEST_HOLE_WIDTH);
 
             x = (int)floor(position.x * TS_MAP_SCALE + 0.5);
             y = ((int)floor(position.y * TS_MAP_SCALE + 0.5));
@@ -347,7 +349,7 @@ int main( int argc,char** argv )
                 position2 = position;
                 for (i = 0; i < 500; i++) {
                     position2.x++;
-                    fprintf(output2, "%d\n", ts_distance_scan_to_map(&sensor_data[cnt_scans].scan, &map, &position2));
+                    fprintf(output2, "%d\n", map.ts_distance_scan_to_map(&sensor_data[cnt_scans].scan, &position2));
                 }
                 fclose(output2);
             }

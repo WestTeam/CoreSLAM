@@ -6,10 +6,33 @@
 namespace WestBot {
 namespace CoreSLAM {
 
+class Map;
+class Position;
+class Scan;
+
 class Randomizer
 {
 public:
-    Randomizer() = default;
+    Randomizer();
+
+    double ts_random_normal_fix();
+
+    double ts_random_normal(double m, double s );
+
+    void ts_random_init( unsigned long jsrseed );
+
+    double ts_random();
+
+    long ts_random_int( long min, long max );
+
+    Position ts_monte_carlo_search(
+        Scan* scan,
+        Map* map,
+        Position* start_pos,
+        double sigma_xy,
+        double sigma_theta,
+        int stop,
+        int* bestdist );
 
     unsigned long jz;
     unsigned long jsr;

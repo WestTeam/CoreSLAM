@@ -1,45 +1,18 @@
 // Copyright (c) 2018 All Rights Reserved WestBot
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
+#include <stdint.h>		// Use the C99 official header
 
-#include <WestBot/CoreSLAM/CoreSlam.hpp>
+#include <WestBot/CoreSLAM/Map.hpp>
+#include <WestBot/CoreSLAM/Position.hpp>
+#include <WestBot/CoreSLAM/Scan.hpp>
 
 using namespace WestBot;
 using namespace WestBot::CoreSLAM;
 
-double WestBot::CoreSLAM::ts_distance( Position* pos1, Position* pos2 )
-{
-    return sqrt((pos1->x - pos2->x) * (pos1->x - pos2->x) + (pos1->y - pos2->y) * (pos1->y - pos2->y));
-}
-
-void WestBot::CoreSLAM::ts_save_map_pgm(
-    Map* map,
-    Map* overlay,
-    char *filename,
-    int width,
-    int height )
-{
-    int x, y, xp, yp;
-    FILE *output;
-    output = fopen(filename, "wt");
-    fprintf(output, "P2\n%d %d 255\n", width, height);
-    y = (TS_MAP_SIZE - height) / 2;
-    for (yp = 0; yp < height; y++, yp++) {
-        x = (TS_MAP_SIZE - width) / 2;
-	for (xp = 0; xp < width; x++, xp++) {
-	    if (overlay->map[ (TS_MAP_SIZE - 1 - y) * TS_MAP_SIZE + x] == 0)
-                fprintf(output, "0 ");
-            else
-                fprintf(output, "%d ", (int)(map->map[ (TS_MAP_SIZE - 1 - y) * TS_MAP_SIZE + x]) >> 8);
-	}
-	fprintf(output, "\n");
-    }
-    fclose(output);
-}
-
-void WestBot::CoreSLAM::ts_draw_scan( Scan* scan, Map* map, Position* pos )
+void Scan::ts_draw_scan( Map* map, Position* pos )
 {
     double c, s;
     double x2p, y2p;
@@ -50,10 +23,10 @@ void WestBot::CoreSLAM::ts_draw_scan( Scan* scan, Map* map, Position* pos )
     x1 = (int)floor(pos->x * TS_MAP_SCALE + 0.5);
     y1 = (int)floor(pos->y * TS_MAP_SCALE + 0.5);
     // Translate and rotate scan to robot position
-    for (i = 0; i != scan->nb_points; i++) {
-        if (scan->value[i] != TS_NO_OBSTACLE) {
-            x2p = c * scan->x[i] - s * scan->y[i];
-            y2p = s * scan->x[i] + c * scan->y[i];
+    for (i = 0; i != nb_points; i++) {
+        if (value[i] != TS_NO_OBSTACLE) {
+            x2p = c * x[i] - s * y[i];
+            y2p = s * x[i] + c * y[i];
             x2p *= TS_MAP_SCALE;
             y2p *= TS_MAP_SCALE;
             x2 = (int)floor(pos->x * TS_MAP_SCALE + x2p + 0.5);
@@ -64,8 +37,7 @@ void WestBot::CoreSLAM::ts_draw_scan( Scan* scan, Map* map, Position* pos )
     }
 }
 
-void WestBot::CoreSLAM::ts_draw_scan_RGB(
-    Scan* scan,
+void Scan::ts_draw_scan_RGB(
     Map* map,
     Position* pos,
     unsigned char* pixmap,
@@ -83,10 +55,10 @@ void WestBot::CoreSLAM::ts_draw_scan_RGB(
     x1 = (int)floor(pos->x * TS_MAP_SCALE + 0.5);
     y1 = (int)floor(pos->y * TS_MAP_SCALE + 0.5);
     // Translate and rotate scan to robot position
-    for (i = 0; i < scan->nb_points; i++) {
-        if (scan->value[i] != TS_NO_OBSTACLE) {
-            x2p = c * scan->x[i] - s * scan->y[i];
-            y2p = s * scan->x[i] + c * scan->y[i];
+    for (i = 0; i < nb_points; i++) {
+        if (value[i] != TS_NO_OBSTACLE) {
+            x2p = c * x[i] - s * y[i];
+            y2p = s * x[i] + c * y[i];
             x2p *= TS_MAP_SCALE;
             y2p *= TS_MAP_SCALE;
             x2 = (int)floor(pos->x * TS_MAP_SCALE + x2p + 0.5);

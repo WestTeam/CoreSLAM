@@ -5,29 +5,38 @@
 #include <math.h>
 #include <stdint.h>		// Use the C99 official header
 
-#include <WestBot/CoreSLAM/CoreSlam.hpp>
-#include <WestBot/CoreSLAM/Defines.hpp>
+#include <WestBot/CoreSLAM/Map.hpp>
+#include <WestBot/CoreSLAM/Position.hpp>
+#include <WestBot/CoreSLAM/Scan.hpp>
 
 #define SWAP(x, y) (x ^= y ^= x ^= y)
 
 using namespace WestBot;
 using namespace WestBot::CoreSLAM;
 
-void WestBot::CoreSLAM::ts_map_init( Map* map )
+Map::Map()
 {
-    int x, y, initval;
+    ts_map_init();
+}
+
+void Map::ts_map_init()
+{
+    int x;
+    int y;
+    int initval;
     ts_map_pixel_t *ptr;
     initval = (TS_OBSTACLE + TS_NO_OBSTACLE) / 2;
-    for (ptr = map->map, y = 0; y < TS_MAP_SIZE; y++) {
-	for (x = 0; x < TS_MAP_SIZE; x++, ptr++) {
-	    *ptr = initval;
-	}
+    for( ptr = map, y = 0; y < TS_MAP_SIZE; y++ )
+    {
+	    for( x = 0; x < TS_MAP_SIZE; x++, ptr++)
+        {
+	        *ptr = initval;
+	    }
     }
 }
 
-int WestBot::CoreSLAM::ts_distance_scan_to_map(
+int Map::ts_distance_scan_to_map(
     Scan* scan,
-    Map* map,
     Position* pos )
 {
     double c, s;
@@ -44,7 +53,7 @@ int WestBot::CoreSLAM::ts_distance_scan_to_map(
             y = (int)floor((pos->y + s * scan->x[i] + c * scan->y[i]) * TS_MAP_SCALE + 0.5);
             // Check boundaries
             if (x >= 0 && x < TS_MAP_SIZE && y >= 0 && y < TS_MAP_SIZE) {
-                sum += map->map[y * TS_MAP_SIZE + x];
+                sum += map[y * TS_MAP_SIZE + x];
                 nb_points++;
             }
         }
@@ -54,8 +63,7 @@ int WestBot::CoreSLAM::ts_distance_scan_to_map(
     return (int)sum;
 }
 
-void ts_map_laser_ray(
-    Map* map,
+void Map::ts_map_laser_ray(
     int x1,
     int y1,
     int x2,
@@ -113,7 +121,7 @@ void ts_map_laser_ray(
     errorv = derrorv / 2;
     incv = (value - TS_NO_OBSTACLE) / derrorv;
     incerrorv = value - TS_NO_OBSTACLE - derrorv * incv;
-    ptr = map->map + y1 * TS_MAP_SIZE + x1;
+    ptr = map + y1 * TS_MAP_SIZE + x1;
     pixval = TS_NO_OBSTACLE;
     for (x = 0; x <= dxc; x++, ptr += incptrx) {
         if (x > dx - 2 * derrorv) {
@@ -142,9 +150,8 @@ void ts_map_laser_ray(
     }
 }
 
-void WestBot::CoreSLAM::ts_map_update(
+void Map::ts_map_update(
     Scan* scan,
-    Map* map,
     Position* pos,
     int quality,
     int hole_width )
@@ -178,6 +185,6 @@ void WestBot::CoreSLAM::ts_map_update(
             value = TS_OBSTACLE;
         }
         //printf("%d %d %d %d %d %d %d\n", i, x1, y1, x2, y2, xp, yp);
-        ts_map_laser_ray(map, x1, y1, x2, y2, xp, yp, value, q);
+        ts_map_laser_ray(x1, y1, x2, y2, xp, yp, value, q);
     }
 }
