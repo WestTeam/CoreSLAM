@@ -7,7 +7,6 @@
 
 #include "opencv2/opencv.hpp"
 
-#include <WestBot/CoreSLAM/CoreSlam.hpp>
 #include <WestBot/CoreSLAM/Scan.hpp>
 #include <WestBot/CoreSLAM/Position.hpp>
 #include <WestBot/CoreSLAM/Map.hpp>
