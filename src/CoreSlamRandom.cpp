@@ -123,7 +123,7 @@ Position WestBot::CoreSLAM::ts_monte_carlo_search(
         stop = -stop;
     }
     currentpos = bestpos = lastbestpos = *start_pos;
-    currentdist = ts_distance_scan_to_map(scan, map, &currentpos);
+    currentdist = map->ts_distance_scan_to_map(scan, &currentpos);
     bestdist = lastbestdist = currentdist;
 
     do {
@@ -132,7 +132,7 @@ Position WestBot::CoreSLAM::ts_monte_carlo_search(
 	currentpos.y = ts_random_normal(randomizer, currentpos.y, sigma_xy);
 	currentpos.theta = ts_random_normal(randomizer, currentpos.theta, sigma_theta);
 
-	currentdist = ts_distance_scan_to_map(scan, map, &currentpos);
+	currentdist = map->ts_distance_scan_to_map(scan, &currentpos);
 
 	if (currentdist < bestdist) {
 	    bestdist = currentdist;

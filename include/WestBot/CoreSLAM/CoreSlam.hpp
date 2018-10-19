@@ -15,22 +15,6 @@ namespace WestBot {
 namespace CoreSLAM {
 
 // ========================================================================== //
-// MAP
-void ts_map_init( Map* map );
-
-int ts_distance_scan_to_map(
-    Scan* scan,
-    Map* map,
-    Position* pos );
-
-void ts_map_update(
-    Scan* scan,
-    Map* map,
-    Position* position,
-    int quality,
-    int hole_width );
-
-// ========================================================================== //
 // RANDOM: Stochastic part
 double ts_random_normal_fix( Randomizer* d );
 

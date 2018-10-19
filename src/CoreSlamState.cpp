@@ -122,7 +122,7 @@ void WestBot::CoreSLAM::ts_iterative_map_building(
     state->distance += d;
 
     // Map update
-    ts_map_update(&scan2map, state->map, &position, 50, state->hole_width);
+    state->map->ts_map_update(&scan2map, &position, 50, state->hole_width);
 
     // Prepare next step
     state->position = sd->position[state->direction];
