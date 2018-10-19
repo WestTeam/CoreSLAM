@@ -12,14 +12,6 @@
 
 namespace WestBot {
 namespace CoreSLAM {
-// ========================================================================== //
-// Extensions
-void ts_save_map_pgm(
-    Map* map,
-    Map* overlay,
-    char* filename,
-    int width,
-    int height );
 
 // ========================================================================== //
 void ts_state_init(
