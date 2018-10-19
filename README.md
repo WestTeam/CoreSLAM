@@ -13,9 +13,15 @@ http://www.researchgate.net/publication/228374722_CoreSLAM_a_SLAM_Algorithm_in_l
 
 ## Build
 
-You need to create a build folder and cd to it.
-Then run from the build folder: cmake PATH-TO-CoreSLAM
-And then type make
+You need to install CMake with version higher than 2.8.1.
+
+```
+cd PATH-TO-CoreSLAM
+mkdir build
+cd build
+cmake ../
+make
+```
 
 ### Note:
 The CMakeLists is written for macOS build. If you want to build it on Linux just change:
