@@ -11,3 +11,25 @@ http://www.researchgate.net/publication/228374722_CoreSLAM_a_SLAM_Algorithm_in_l
 
 ![alt text](https://github.com/WestTeam/CoreSLAM/blob/master/images/demo.png)
 
+## Build
+
+You need to create a build folder and cd to it.
+Then run from the build folder: cmake PATH-TO-CoreSLAM
+And then type make
+
+### Note:
+The CMakeLists is written for macOS build. If you want to build it on Linux just change:
+
+'''
+target_link_libraries(
+    TestLabReverse
+	${OpenCV_LIBRARIES}
+    ${PROJECT_SOURCE_DIR}/build/libCoreSLAM.dylib )
+'''
+To,
+'''
+target_link_libraries(
+    TestLabReverse
+	${OpenCV_LIBRARIES}
+    ${PROJECT_SOURCE_DIR}/build/libCoreSLAM.so )
+'''
