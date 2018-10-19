@@ -10,7 +10,7 @@ using namespace WestBot::CoreSLAM;
 
 void WestBot::CoreSLAM::ts_state_init(
     State* state,
-    Mao* map,
+    Map* map,
     RobotParameters* params,
     LaserParameters* laser_params,
     Position* position,
@@ -78,9 +78,9 @@ void WestBot::CoreSLAM::ts_iterative_map_building(
     State* state )
 {
     double psidot, v, d;
-    ts_scan_t scan2map;
+    Scan scan2map;
     double m, thetarad;
-    ts_position_t position;
+    Position position;
 
     // Manage robot position
     if (state->timestamp != 0) {

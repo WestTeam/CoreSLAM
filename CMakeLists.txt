@@ -15,7 +15,14 @@ SET( CMAKE_C_COMPILER "/usr/bin/g++" )
 include_directories( include )
 
 # library
-add_library( CoreSLAM SHARED src/CoreSlam.cpp )
+add_library(
+    CoreSLAM SHARED
+    src/CoreSlam.cpp
+    src/CoreSlamExtension.cpp
+    src/CoreSlamLoopClosing.cpp
+    src/CoreSlamRandom.cpp
+    src/CoreSlamState.cpp )
+
 target_link_libraries( CoreSLAM )
 
 # Binaries
