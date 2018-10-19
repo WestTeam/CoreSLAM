@@ -8,3 +8,6 @@ A SLAM Algorithm in less than 200 lines of C code by Bruno Steux, Oussama El Ham
 Mines ParisTech - Center of Robotics, Paris, FRANCE.
 
 http://www.researchgate.net/publication/228374722_CoreSLAM_a_SLAM_Algorithm_in_less_than_200_lines_of_C_code
+
+![alt text](https://github.com/WestTeam/CoreSLAM/blob/master/images/demo.png)
+
