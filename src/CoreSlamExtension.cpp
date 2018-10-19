@@ -9,11 +9,6 @@
 using namespace WestBot;
 using namespace WestBot::CoreSLAM;
 
-double WestBot::CoreSLAM::ts_distance( Position* pos1, Position* pos2 )
-{
-    return sqrt((pos1->x - pos2->x) * (pos1->x - pos2->x) + (pos1->y - pos2->y) * (pos1->y - pos2->y));
-}
-
 void WestBot::CoreSLAM::ts_save_map_pgm(
     Map* map,
     Map* overlay,

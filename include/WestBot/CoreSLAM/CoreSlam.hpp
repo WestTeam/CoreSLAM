@@ -38,8 +38,6 @@ Position ts_monte_carlo_search(
 
 // ========================================================================== //
 // Extensions
-double ts_distance( Position* pos1, Position* pos2 );
-
 void ts_save_map_pgm(
     Map* map,
     Map* overlay,

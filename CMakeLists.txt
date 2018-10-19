@@ -21,7 +21,8 @@ add_library(
     src/CoreSlamLoopClosing.cpp
     src/CoreSlamRandom.cpp
     src/CoreSlamState.cpp
-    src/Map.cpp )
+    src/Map.cpp
+    src/Position.cpp )
 
 target_link_libraries( CoreSLAM )
 

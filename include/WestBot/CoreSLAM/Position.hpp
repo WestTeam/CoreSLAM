@@ -11,6 +11,8 @@ class Position
 public:
     Position() = default;
 
+    static double ts_distance( Position* pos1, Position* pos2 );
+
     double x;     // in mm
     double y;     // in mm
     double theta; // in degrees
