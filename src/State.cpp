@@ -50,23 +50,23 @@ void State::ts_build_scan(
 
     scan->nb_points = 0;
     // Span the laser scans to better cosd->ver the space
-    for (i = 0; i < laser_params.scan_size; i++) {
+    for (i = 0; i < laser_params.scanSize(); i++) {
         for (j = 0; j != span; j++) {
-            angle_deg = laser_params.angle_min + ((double)(i * span + j)) * (laser_params.angle_max - laser_params.angle_min) / (laser_params.scan_size * span - 1);
-            angle_deg += sd->psidot / 3600.0 * ((double)(i * span + j)) * (laser_params.angle_max - laser_params.angle_min) / (laser_params.scan_size * span - 1);
+            angle_deg = laser_params.angleMin() + ((double)(i * span + j)) * (laser_params.angleMax() - laser_params.angleMin()) / (laser_params.scanSize() * span - 1);
+            angle_deg += sd->psidot / 3600.0 * ((double)(i * span + j)) * (laser_params.angleMax() - laser_params.angleMin()) / (laser_params.scanSize() * span - 1);
 
             angle_rad = angle_deg * M_PI / 180;
-            if (i > laser_params.detection_margin && i < laser_params.scan_size - laser_params.detection_margin) {
+            if (i > laser_params.detectionMargin() && i < laser_params.scanSize() - laser_params.detectionMargin()) {
                 if (sd->d[i] == 0) {
-                    scan->x[scan->nb_points] = laser_params.distance_no_detection * cos(angle_rad);
-                    scan->x[scan->nb_points] -= sd->v * 1000 * ((double)(i * span + j)) * (laser_params.angle_max - laser_params.angle_min) / (laser_params.scan_size * span - 1) / 3600.0;
-                    scan->y[scan->nb_points] = laser_params.distance_no_detection * sin(angle_rad);
+                    scan->x[scan->nb_points] = laser_params.distanceNoDetection() * cos(angle_rad);
+                    scan->x[scan->nb_points] -= sd->v * 1000 * ((double)(i * span + j)) * (laser_params.angleMax() - laser_params.angleMin()) / (laser_params.scanSize() * span - 1) / 3600.0;
+                    scan->y[scan->nb_points] = laser_params.distanceNoDetection() * sin(angle_rad);
                     scan->value[scan->nb_points] = TS_NO_OBSTACLE;
                     scan->nb_points++;
                 }
                 if (sd->d[i] > hole_width / 2) {
                     scan->x[scan->nb_points] = sd->d[i] * cos(angle_rad);
-                    scan->x[scan->nb_points] -= sd->v * 1000 * ((double)(i * span + j)) * (laser_params.angle_max - laser_params.angle_min) / (laser_params.scan_size * span - 1) / 3600.0;
+                    scan->x[scan->nb_points] -= sd->v * 1000 * ((double)(i * span + j)) * (laser_params.angleMax() - laser_params.angleMin()) / (laser_params.scanSize() * span - 1) / 3600.0;
                     scan->y[scan->nb_points] = sd->d[i] * sin(angle_rad);
                     scan->value[scan->nb_points] = TS_OBSTACLE;
                     scan->nb_points++;
@@ -85,20 +85,20 @@ void State::ts_iterative_map_building( SensorData* sd )
 
     // Manage robot position
     if (timestamp != 0) {
-        m = params.r * M_PI / params.inc;
-        v = m * (sd->q1 - q1 + (sd->q2 - q2) * params.ratio);
+        m = params.wheelRadius() * M_PI / params.inc();
+        v = m * (sd->q1 - q1 + (sd->q2 - q2) * params.ratio());
         thetarad = position.theta * M_PI / 180;
-        position = position;
+        position = this->position;
         position.x += v * 1000 * cos(thetarad);
         position.y += v * 1000 * sin(thetarad);
-        psidot = (m * ((sd->q2 - q2) * params.ratio - sd->q1 + q1) / params.R) * 180 / M_PI;
+        psidot = (m * ((sd->q2 - q2) * params.ratio() - sd->q1 + q1) / params.halfWheelAxisLength()) * 180 / M_PI;
         position.theta += psidot;
         v *= 1000000.0 / (sd->timestamp - timestamp);
         psidot *= 1000000.0 / (sd->timestamp - timestamp);
     } else {
         psidot = psidot = 0;
         v = v = 0;
-        position = position;
+        position = this->position;
         thetarad = position.theta * M_PI / 180;
     }
 
@@ -112,12 +112,12 @@ void State::ts_iterative_map_building( SensorData* sd )
     ts_build_scan(sd, &scan, 1);
 
     // Monte Carlo search
-    position.x += laser_params.offset * cos(thetarad);
-    position.y += laser_params.offset * sin(thetarad);
+    position.x += laser_params.offset() * cos(thetarad);
+    position.y += laser_params.offset() * sin(thetarad);
     sd->position[direction] = position =
         randomizer.ts_monte_carlo_search(&scan, map, &position, sigma_xy, sigma_theta, 1000, NULL);
-    sd->position[direction].x -= laser_params.offset * cos(position.theta * M_PI / 180);
-    sd->position[direction].y -= laser_params.offset * sin(position.theta * M_PI / 180);
+    sd->position[direction].x -= laser_params.offset() * cos(position.theta * M_PI / 180);
+    sd->position[direction].y -= laser_params.offset() * sin(position.theta * M_PI / 180);
     d = sqrt((position.x - sd->position[direction].x) * (position.x - sd->position[direction].x) +
             (position.y - sd->position[direction].y) * (position.y - sd->position[direction].y));
     distance += d;
@@ -127,8 +127,8 @@ void State::ts_iterative_map_building( SensorData* sd )
 
     // Prepare next step
     position = sd->position[direction];
-    psidot = psidot;
-    v = v;
+    this->psidot = psidot;
+    this->v = v;
     q1 = sd->q1;
     q2 = sd->q2;
     timestamp = sd->timestamp;
